@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.ui.theme" value="simple" />
+    <constant name="struts.custom.i18n.resources" value="msg" />
+    <package name="default" namespace="/" extends="json-default">
+    	 
+    	<interceptors>
+    		<interceptor name="loginInterceptor" class="cn.itcast.erp.util.interceptor.LoginInterceptor"/>
+    		<interceptor name="exceptionInterceptor" class="cn.itcast.erp.util.interceptor.ExceptionInterceptor"/>
+			<interceptor name="authInterceptor" class="cn.itcast.erp.util.interceptor.AuthInterceptor"/>    		
+    		
+    		<interceptor-stack name="systemStack">
+    			<interceptor-ref name="exceptionInterceptor"/>
+    			<interceptor-ref name="loginInterceptor"/>
+    			<interceptor-ref name="authInterceptor"/>
+    			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+    		
+    	</interceptors>
+    	
+    	<default-interceptor-ref name="systemStack"/>
+    	 
+    	<global-results>
+    		<result name="noLogin">index.jsp</result>
+    		<result name="error">/WEB-INF/jsps/error.jsp</result>
+    		<result name="list">/WEB-INF/jsps/${actionName}/list.jsp</result>
+    		<result name="toList" type="redirectAction">${actionName}_list</result>
+    		<result name="input">/WEB-INF/jsps/${actionName}/input.jsp</result>
+    	</global-results>
+    	 
+    	<action name="page_*">
+    		<result>/WEB-INF/jsps/{1}.jsp</result>
+    	</action>
+    	
+    	<!-- Dep -->
+    	<action name="dep_*" class="depAction" method="{1}">
+    	</action>
+    	
+    	<!-- Emp -->
+    	<action name="emp_*" class="empAction" method="{1}">
+    		<result name="loginFail">/WEB-INF/jsps/login.jsp</result>
+    		<result name="loginSuccess">/WEB-INF/jsps/main.jsp</result>
+    		<result name="toChangePwd">/WEB-INF/jsps/emp/changePwd.jsp</result>
+    	</action>
+    	
+    	<!-- role -->
+    	<action name="role_*" class="roleAction" method="{1}">
+    		<result name="list">/WEB-INF/jsps/role/list.jsp</result>
+    		<result name="input">/WEB-INF/jsps/role/input.jsp</result>
+    	</action>
+
+		<!-- res -->
+		<action name="res_*" class="resAction" method="{1}">
+			<result name="list">/WEB-INF/jsps/res/list.jsp</result>
+    		<result name="input">/WEB-INF/jsps/res/input.jsp</result>
+    	</action>  
+    	
+    	<!-- menu -->
+    	<action name="menu_*" class="menuAction" method="{1}">
+    	</action> 
+    	
+    	<!-- supplier -->
+    	<action name="supplier_*" class="supplierAction" method="{1}">
+    	</action> 
+    	
+    	<!-- goodsType -->
+    	<action name="goodsType_*" class="goodsTypeAction" method="{1}">
+    		<result name="ajaxGetBySm" type="json">
+    			<param name="root">action</param>
+    			<param name="includeProperties">
+    			<!-- 这里是一个正则表达式 -->
+    				gtmList\[\d+\]\.name,
+    				gtmList\[\d+\]\.uuid,
+    			</param>
+    		</result>
+    	</action>
+    	
+    	<!-- goods -->
+    	<action name="goods_*" class="goodsAction" method="{1}">
+    	</action>  
+    	
+    	<!-- orders -->
+    	<action name="orders_*" class="ordersAction" method="{1}">
+    		<!-- 采购订单 -->
+    		<result name="buyList">/WEB-INF/jsps/orders/buy/buyList.jsp</result>
+    		<result name="buyInput">/WEB-INF/jsps/orders/buy/buyInput.jsp</result>
+    		<result name="orderDetail">/WEB-INF/jsps/orders/buy/buyDetailList.jsp</result>
+    		<result name="saveBuy" type="redirectAction">orders_buyList</result>
+    		
+    		<!-- 采购审核 -->
+    		<result name="buyCheckList">/WEB-INF/jsps/orders/buy/buyCheckList.jsp</result>
+    		<result name="buyCheck">/WEB-INF/jsps/orders/buy/buyCheck.jsp</result>
+    		<result name="buyCheckNoPass" type="redirectAction">orders_buyCheckList</result>
+    		<result name="buyCheckPass" type="redirectAction">orders_buyCheckList</result>
+    		
+    		<!-- ajax -->
+    		<result name="ajaxGetGtm" type="json">
+    			<param name="root">action</param>
+    			<param name="includeProperties">
+    				gtmList\[\d+\]\.uuid,
+    				gtmList\[\d+\]\.name,
+    				gmList\[\d+\]\.uuid,
+    				gmList\[\d+\]\.name,
+    				gm\.inPriceView,
+    			</param>
+    		</result>
+    		<result name="ajaxGetGtm2" type="json">
+    			<param name="root">action</param>
+    			<param name="includeProperties">
+    				gtmList\[\d+\]\.uuid,
+    				gtmList\[\d+\]\.name,
+    				gmList\[\d+\]\.uuid,
+    				gmList\[\d+\]\.name,
+    				gm\.inPriceView,
+    			</param>
+    		</result>
+    		<result name="ajaxGetByGtm" type="json">
+    			<param name="root">action</param>
+    			<param name="includeProperties">
+    				gmList\[\d+\]\.uuid,
+    				gmList\[\d+\]\.name,
+    				gm\.inPriceView,
+    			</param>
+    		</result>
+    		<result name="ajaxGetGm" type="json">
+    			<param name="root">action</param>
+    			<param name="includeProperties">
+    				gm\.inPriceView,
+    			</param>
+    		</result>
+    		
+    		<!-- 入库 -->
+    		<result name="inStoreList">/WEB-INF/jsps/store/in/inStoreList.jsp</result>
+    		<result name="inStoreDetail">/WEB-INF/jsps/store/in/inStoreDetail.jsp</result>
+    		
+    		<result name="ajaxInGoods" type="json">
+    			<param name="root">odm</param>
+    			<param name="includeProperties">
+    				num,
+    				surplus
+    			</param>
+    		</result>
+    	</action>  	
+    	
+    	<!-- OrderDetail -->
+    	<action name="orderDetail_*" class="orderDetailAction" method="{1}">
+    	</action>  
+    	
+    	<!-- Transport -->
+    	<action name="transport_*" class="ordersAction" method="{1}">
+    		<result name="taskList">/WEB-INF/jsps/transport/taskList.jsp</result>
+    		<result name="taskDetail">/WEB-INF/jsps/transport/taskDetail.jsp</result>
+    		<result name="toTaskList" type="redirectAction">transport_taskList</result>
+    		<result name="taskFindList">/WEB-INF/jsps/transport/taskFindList.jsp</result>
+    		<result name="taskFindDetail">/WEB-INF/jsps/transport/taskFindDetail.jsp</result>
+    		<result name="toTaskFindList" type="redirectAction">transport_taskFindList</result>
+    	</action> 
+    	
+    	<!-- Store -->
+    	<action name="store_*" class="storeAction" method="{1}">
+    	</action>   	
+    	
+    	<!-- StoreDetail -->
+    	<action name="storeDetail_*" class="storeDetailAction" method="{1}">
+    	</action> 
+    	
+    	<!-- OperDetail -->
+    	<action name="operDetail_*" class="operDetailAction" method="{1}">
+    	</action> 
+    	
+    	<!-- Bill -->
+    	<action name="bill_*" class="billAction" method="{1}">
+    		<result name="buyBillList">/WEB-INF/jsps/bill/buyBillList.jsp</result>
+    		
+    		<!-- ajax -->
+    		<result name="ajaxGetBillByGoods" type="json">
+    			<param name="root">action</param>
+    			<param name="includeProperties">
+    				billGoodsList\[\d+\]\.om\.orderNum,
+    				billGoodsList\[\d+\]\.om\.createTimeView,
+    				billGoodsList\[\d+\]\.num,
+    				billGoodsList\[\d+\]\.price
+    			</param>
+    		</result>
+    	</action> 
+    </package>
+</struts>

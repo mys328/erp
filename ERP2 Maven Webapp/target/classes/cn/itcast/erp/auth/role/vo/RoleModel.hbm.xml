@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="cn.itcast.erp.auth.role.vo.RoleModel" table="tbl_role">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="name"/>
+        <property name="code"/>
+		<!-- 角色对资源的多对多 -->
+        <set name="reses" table="tbl_res_role">
+        	<key column="roleUuid"/>
+        	<many-to-many
+        		class="cn.itcast.erp.auth.res.vo.ResModel"
+        		column="resUuid"
+        	/>
+        </set>
+        <!-- 角色对人员多对多 -->
+        <set name="emps" table="tbl_emp_role">
+        	<key column="roleUuid"/>
+        	<many-to-many 
+        		class="cn.itcast.erp.auth.emp.vo.EmpModel"
+        		column="empUuid"
+        	/>
+        </set>
+
+        <!-- 角色对菜单多对多 -->
+        <set name="menus" table="tbl_role_menu">
+        	<key column="roleUuid"/>
+        	<many-to-many 
+        		class="cn.itcast.erp.auth.menu.vo.MenuModel"
+        		column="menuUuid"
+        	/>
+        </set>
+    </class>
+</hibernate-mapping>

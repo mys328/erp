@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="cn.itcast.erp.invoice.orders.vo.OrdersModel" table="tbl_orders">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="orderNum"/>
+        <property name="totalNum"/>
+        <property name="createTime"/>
+        <property name="checkTime"/>
+        <property name="endTime"/>
+        <property name="orderType"/>
+        <property name="type"/>
+        <property name="totalPrice"/>
+
+        <many-to-one 
+        	name="completer"
+        	column="completer"
+        	class="cn.itcast.erp.auth.emp.vo.EmpModel"
+        	/>
+        
+        <many-to-one 
+        	name="checker"
+        	column="checker"
+        	class="cn.itcast.erp.auth.emp.vo.EmpModel"
+        	/>
+        
+        <many-to-one 
+        	name="creater"
+        	column="creater"
+        	class="cn.itcast.erp.auth.emp.vo.EmpModel"
+        	/>
+        	
+        <many-to-one 
+        	name="sm"
+        	column="supplierUuid"
+        	class="cn.itcast.erp.invoice.supplier.vo.SupplierModel"
+        	/>
+        
+        <set name="odms" cascade="save-update" inverse="true">
+        	<key column="orderUuid"/>
+        	<one-to-many
+        		class="cn.itcast.erp.invoice.orderdetail.vo.OrderDetailModel"
+        	/>
+        </set>
+    </class>
+</hibernate-mapping>

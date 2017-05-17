@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="cn.itcast.erp.invoice.operdetail.vo.OperDetailModel" table="tbl_operDetail">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="num"/>
+        <property name="type"/>
+        <property name="operTime"/>
+       
+       <many-to-one 
+        	name="sm"
+        	column="storeUuid"
+        	class="cn.itcast.erp.invoice.store.vo.StoreModel"
+        	/>
+        	
+        <many-to-one 
+        	name="gm"
+        	column="goodsUuid"
+        	class="cn.itcast.erp.invoice.goods.vo.GoodsModel"
+        	/>
+        
+         <many-to-one 
+        	name="em"
+        	column="empUuid"
+        	class="cn.itcast.erp.auth.emp.vo.EmpModel"
+        	/>
+    </class>
+</hibernate-mapping>

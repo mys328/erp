@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		">  
+		
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="doTime"/>
+				<ref bean="doTime2"/>
+			</list>
+		</property>
+	</bean>
+		
+	<!-- 作业任务 -->
+	<bean id="doTime" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobTask"/>
+		<property name="cronExpression" value="0 0 2 * * ?"/>
+	</bean>
+	<bean id="doTime2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jobTask2"/>
+		<property name="cronExpression" value="0 0 2 * * ?"/>
+	</bean>
+	
+	<!-- 定义作业任务 -->
+	<bean id="jobTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="timerTask"/>
+		<property name="targetMethod" value="updateGoodsUseNum"/>
+	</bean>
+	<bean id="jobTask2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="timerTask"/>
+		<property name="targetMethod" value="storeWarn"/>
+	</bean>
+	
+	<!-- 定义一个定时bean -->
+	<bean id="timerTask" class="cn.itcast.erp.util.timer.TimerTask">
+		<property name="goodsDao" ref="goodsDao"/>
+		<property name="mailSender" ref="mailSender"/>
+	</bean>
+	
+</beans>	
+	

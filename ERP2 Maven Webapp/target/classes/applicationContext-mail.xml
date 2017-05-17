@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		">  
+		
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- 基于校验规则的邮件发送方式 -->
+		<!-- SMTP协议介绍 -->
+		<property name="host" value="smtp.126.com" />
+		<property name="username" value="itcast0228" />
+		<property name="password" value="0228itcast" />
+		<property name="javaMailProperties">
+			<props>
+				<!-- 必须进行授权认证，它的目的就是阻止他人任意乱发邮件 -->
+				<prop key="mail.smtp.auth">true</prop>
+				<!-- SMTP加密方式:连接到一个TLS保护连接 -->
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<!-- 设置邮件发送超时时间 -->
+				<prop key="mail.smtp.timeout">25000</prop>  
+			</props>
+		</property>
+	</bean>
+</beans>	
+	
